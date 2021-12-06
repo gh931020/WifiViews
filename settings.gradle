@@ -1,0 +1,4 @@
+rootProject.name = "WifiView"
+include ':app'
+include ':app:mylibrary'
+include ':wifiview'
