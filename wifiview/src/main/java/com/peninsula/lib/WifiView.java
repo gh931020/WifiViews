@@ -161,11 +161,6 @@ public class WifiView extends AppCompatImageView {
         mWifiViewClickListener = wifiViewClickListener;
     }
 
-    interface WifiViewClickListener{
-        void onClick();
-        void onLongClick();
-    }
-
     enum WifiStatus {
         /**
          * 信号强度0
