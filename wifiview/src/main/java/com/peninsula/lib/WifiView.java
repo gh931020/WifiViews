@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -28,6 +30,16 @@ public class WifiView extends AppCompatImageView {
     private TextView mWifiTv;
     private String mStatusText = "";
     private WifiViewClickListener mWifiViewClickListener;
+
+    private int textColor = Color.WHITE;
+
+    public int getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
+    }
 
     public WifiView(Context context) {
         this(context, null);
@@ -138,21 +150,22 @@ public class WifiView extends AppCompatImageView {
 
     private void showPopwindow(){
         if (mPopupWindow == null){
-            mPopupWindow = new PopupWindow(getContext());
             // View view = LayoutInflater.from(getContext()).inflate(R.layout.pop_wifi,null, false);
             mWifiTv = new TextView(getContext());
             mWifiTv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mWifiTv.setTextSize(14);
-            mWifiTv.setTextColor(Color.WHITE);
-            mWifiTv.setSingleLine(true);
-            mWifiTv.setMarqueeRepeatLimit(7);
+            mWifiTv.setTextColor(textColor);
             mWifiTv.setFocusable(true);
-            mWifiTv.requestFocus();
-            // mWifiTv = view.findViewById(R.id.wifiTv);
-            mPopupWindow.setContentView(mWifiTv);
-            mPopupWindow.setHeight(mWifiTv.getMeasuredHeight());
-            mPopupWindow.setOutsideTouchable(true);
+            mWifiTv.setFocusableInTouchMode(true);
+            mWifiTv.setMarqueeRepeatLimit(-1);
+            mWifiTv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            mWifiTv.setSingleLine(true);
+            mPopupWindow = new PopupWindow(mWifiTv, getWidth(), getHeight()/2);
             mPopupWindow.setFocusable(true);
+            mPopupWindow.setOutsideTouchable(true);
+            // Android5.0不加这一句点击外部区域无法关闭;
+            // https://www.jianshu.com/p/7b42fc303bf8
+            mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
         }
         if (mPopupWindow.isShowing()){
             mPopupWindow.dismiss();
@@ -169,6 +182,8 @@ public class WifiView extends AppCompatImageView {
     public void setWifiViewClickListener(WifiViewClickListener wifiViewClickListener) {
         mWifiViewClickListener = wifiViewClickListener;
     }
+
+
 
     enum WifiStatus {
         /**
