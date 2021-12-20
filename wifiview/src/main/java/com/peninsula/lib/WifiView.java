@@ -1,6 +1,7 @@
 package com.peninsula.lib;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -69,7 +70,10 @@ public class WifiView extends AppCompatImageView {
                 mWifiViewClickListener.onLongClick();
             }else{
                 Log.e(TAG, "无监听器设置,执行默认长按逻辑");
-
+                Intent it = new Intent();
+                ComponentName cn = new ComponentName("com.android.settings","com.android.settings.wifi.WifiSettings");
+                it.setComponent(cn);
+                getContext().startActivity(it);
             }
             return true;
         });
@@ -84,7 +88,7 @@ public class WifiView extends AppCompatImageView {
     }
 
     public void unRegistReceiver() {
-
+        getContext().unregisterReceiver(broadcastReceiver);
     }
 
     public BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -140,8 +144,13 @@ public class WifiView extends AppCompatImageView {
             mWifiTv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mWifiTv.setTextSize(14);
             mWifiTv.setTextColor(Color.WHITE);
+            mWifiTv.setSingleLine(true);
+            mWifiTv.setMarqueeRepeatLimit(7);
+            mWifiTv.setFocusable(true);
+            mWifiTv.requestFocus();
             // mWifiTv = view.findViewById(R.id.wifiTv);
             mPopupWindow.setContentView(mWifiTv);
+            mPopupWindow.setHeight(mWifiTv.getMeasuredHeight());
             mPopupWindow.setOutsideTouchable(true);
             mPopupWindow.setFocusable(true);
         }
