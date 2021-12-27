@@ -82,10 +82,18 @@ public class WifiView extends AppCompatImageView {
                 mWifiViewClickListener.onLongClick();
             }else{
                 Log.e(TAG, "无监听器设置,执行默认长按逻辑");
-                Intent it = new Intent();
-                ComponentName cn = new ComponentName("com.android.settings","com.android.settings.wifi.WifiSettings");
-                it.setComponent(cn);
-                getContext().startActivity(it);
+                // Intent it = new Intent();
+                // ComponentName cn = new ComponentName("com.android.settings","com.android.settings.wifi.WifiSettings");
+                // it.setComponent(cn);
+                // getContext().startActivity(it);
+
+                Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+                // intent.putExtra("only_access_points", true);
+                // intent.putExtra("wifi_enable_next_on_connect", true);
+                intent.putExtra("extra_prefs_show_button_bar", true);
+                //intent.putExtra("extra_prefs_set_next_text", "完成");
+                //intent.putExtra("extra_prefs_set_back_text", "返回");
+                getContext().startActivity(intent);
             }
             return true;
         });
